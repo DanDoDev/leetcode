@@ -6,10 +6,14 @@
     if(matrix.length === 1) return matrix;
     if(matrix.length === 2) return ['this case needs to be handled'];
     const gridLength = matrix.length;
+    let currentGridLength = gridLength;
     
     for(let i=0; i < gridLength - 2; i++){
         // i acts as increment for inner squares;
-        for(let j=0; j < gridLength - 1 - i; j++){
+    console.log('grid iter', currentGridLength - (2 * i))
+        currentGridLength = currentGridLength - (2 * i);
+        if(currentGridLength < 2)break;
+        for(let j=0; j < currentGridLength - 1; j++){
             // j keeps track of moves necessary to finish a ring 
             let positionInMemory = null;
             let secondPositionInMemory = null;
@@ -45,3 +49,9 @@
     
     
 };
+
+
+
+
+    // [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
+    // [[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15],[16,17,18,19,20],[21,22,23,24,25]]
