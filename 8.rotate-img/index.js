@@ -9,7 +9,7 @@
     
     for(let i=0; i < gridLength - 2; i++){
         // i acts as increment for inner squares;
-        for(let j=0; j < gridLength - 1; j++){
+        for(let j=0; j < gridLength - 1 - i; j++){
             // j keeps track of moves necessary to finish a ring 
             let positionInMemory = null;
             let secondPositionInMemory = null;
