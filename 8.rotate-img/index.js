@@ -4,7 +4,16 @@
  */
  const rotate = (matrix) => {
     if(matrix.length === 1) return matrix;
-    if(matrix.length === 2) return ['this case needs to be handled'];
+    if(matrix.length === 2){
+        let memory = matrix[0][1];
+        matrix[0][1] = matrix[0][0];
+        let memory2 = matrix[1][1];
+        matrix[1][1] = memory;
+        memory = matrix[1][0];
+        matrix[1][0] = memory2;
+        matrix[0][0] = memory;
+        return matrix;  
+    };
     const gridLength = matrix.length;
     let currentGridLength = gridLength;
     
@@ -49,7 +58,6 @@
     
     
 };
-
 
 
 
