@@ -4,35 +4,18 @@
  */
  const rotate = (matrix) => {
     if(matrix.length === 1) return matrix;
-    if(matrix.length === 2){
-        let memory = matrix[0][1];
-        matrix[0][1] = matrix[0][0];
-        let memory2 = matrix[1][1];
-        matrix[1][1] = memory;
-        memory = matrix[1][0];
-        matrix[1][0] = memory2;
-        matrix[0][0] = memory;
-        return matrix;  
-    }
 
     const gridLength = matrix.length;
     let currentGridLength = gridLength;
+    let lastPuzzleIncrement = 0; 
     
     for(let i=0; i < gridLength - 2; i++){
         // i acts as increment for inner squares;
 
         currentGridLength -= i > 0 ? 2 : 0;
-
-        if(currentGridLength === 2){
-            let memory = matrix[0 + i][1 + i];
-            matrix[0 + i][1 + i] = matrix[0 + i][0 + i];
-            let memory2 = matrix[1 + i][1 + i];
-            matrix[1 + i][1 + i] = memory;
-            memory = matrix[1 + i][0 + i];
-            matrix[1 + i][0 + i] = memory2;
-            matrix[0 + i][0 + i] = memory;
-            break;
-        }else if(currentGridLength < 2)break;
+        lastPuzzleIncrement = i;
+        
+        if(currentGridLength <= 2)break;
 
         for(let j=0; j < currentGridLength - 1; j++){
             // j keeps track of moves necessary to finish a ring 
@@ -60,10 +43,19 @@
             }
         }
     }
-
+     
+    if(currentGridLength === 2){
+        let memory = matrix[0 + lastPuzzleIncrement][1 + lastPuzzleIncrement];
+        matrix[0 + lastPuzzleIncrement][1 + lastPuzzleIncrement] = matrix[0 + lastPuzzleIncrement][0 + lastPuzzleIncrement];
+        let memory2 = matrix[1 + lastPuzzleIncrement][1 + lastPuzzleIncrement];
+        matrix[1 + lastPuzzleIncrement][1 + lastPuzzleIncrement] = memory;
+        memory = matrix[1 + lastPuzzleIncrement][0 + lastPuzzleIncrement];
+        matrix[1 + lastPuzzleIncrement][0 + lastPuzzleIncrement] = memory2;
+        matrix[0 + lastPuzzleIncrement][0 + lastPuzzleIncrement] = memory;
+    }
+     
     return matrix;
 };
-
 
 
     // [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
