@@ -5,63 +5,51 @@
  */
  const minWindow = (s, t) => {
     const searchingFor = {};
-    let leftPointer = 0;
+    
     let rightPointer = 0;
     
     let bestString = null;
+    
     let uniqueValues = 0;
     
-    for(let i=0;i<t.length;i++){
+    for(let i=0;i< t.length;i++){
         const valueNew = !searchingFor[t[i]];
-        const qty = valueNew ? 1 : searchingFor[t[i]] + 1;
-        searchingFor[t[i]] = qty;
         if(valueNew)uniqueValues ++;
+        searchingFor[t[i]] = valueNew ? 1 : searchingFor[t[i]] + 1;
     }
-    
-    while(rightPointer <= s.length  && leftPointer + t.length <= s.length  ){
+    for(let leftPointer = 0; leftPointer < s.length; leftPointer++){
+        const isSearchedFor = searchingFor[s[leftPointer]] > 0;
         
-        
-        const stringLength = rightPointer - leftPointer + 1;
-        const stringContainsChars = checkStringContainsChars(s, leftPointer, rightPointer, searchingFor, uniqueValues);
-         if(stringContainsChars && (!bestString || stringLength < bestString[1] - bestString[0] + 1)){
-            bestString = [leftPointer,rightPointer];
-             
-             if(bestString[1] - bestString[0] + 1 === t.length) break;
+        if(isSearchedFor){
+            searchingFor[s[leftPointer]]--;
+            if(searchingFor[s[leftPointer]] === 0)uniqueValues--;
+            console.log('left searched for', s[leftPointer], searchingFor[s[leftPointer]])
         }
-
-
-        if(!stringContainsChars)rightPointer++;
-        else leftPointer++;
-        if(!stringContainsChars && rightPointer === s.length )break;
-         
-    
-            
         
-    }
-    
-    
-    
-    return bestString ? s.substring(bestString[0],bestString[1] + 1) : "";
-    
-};
-
-const checkStringContainsChars = (string, leftPointer, rightPointer, searchingFor, uniqueValues) => {
-    const foundItems = {};
-    let remainingToFind = uniqueValues;
-    
-    
-    for(let i=leftPointer;i<=rightPointer;i++){
-        const char = string[i];
-            
-        if(searchingFor[string[i]] > 0){
-            foundItems[string[i]] = !foundItems[string[i]] ? 1 : foundItems[string[i]] + 1;
-            if(foundItems[string[i]] === searchingFor[string[i]]){
-                remainingToFind--;
+        if(leftPointer > 0){
+            const prevValueCount = searchingFor[s[leftPointer-1]];
+            console.log('prev value count', s[leftPointer-1]);
+            searchingFor[s[leftPointer -1]] = !searchingFor[s[leftPointer -1]] ? 1 : searchingFor[s[leftPointer -1]] + 1;
+            console.log('prev value count', prevValueCount === 0, leftPointer, s.length);
+            if(prevValueCount === 0)uniqueValues++;
+        }
+        
+        
+        while(uniqueValues > 0 && rightPointer < s.length){
+            rightPointer++;
+            const rightSearchedFor = searchingFor[s[rightPointer]];
+            if(rightSearchedFor){
+                console.log('rightSearchedFor', s[rightPointer])
+                searchingFor[s[rightPointer]]--;
+                if(searchingFor[s[rightPointer]] === 0)uniqueValues--;
             }
         }
-        if(remainingToFind.length <= 0) return true;
+        if(uniqueValues === 0 && (!bestString || bestString[1] - bestString[0] > rightPointer - leftPointer)){
+            bestString = [leftPointer,rightPointer];
+        }
     }
-
-
-    return remainingToFind <= 0;
+    
+    return s.substring(bestString[0], bestString[1] + 1);
+    
+    
 }
