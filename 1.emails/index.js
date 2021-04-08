@@ -2,15 +2,14 @@
  * @param {string[]} emails
  * @return {number}
  */
-const numUniqueEmails = (emails) => {
-    let uniqueEmails = [];
+ const numUniqueEmails = (emails) => {
+    let uniqueEmails = {};
     emails.forEach((email) => {
         const processedEmail = emailProcessor(email);
         if(!processedEmail)return;
-        uniqueEmails = uniqueEmails.filter((x) => x !== processedEmail);
-        uniqueEmails.push(processedEmail);    
+        uniqueEmails[processedEmail] = true;    
     });
-    return uniqueEmails.length;
+    return Object.values(uniqueEmails).length;
 };
 
 
