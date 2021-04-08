@@ -9,40 +9,50 @@
     let rightPointer = 0;
     
     let bestString = null;
+    let uniqueValues = 0;
     
     for(let i=0;i<t.length;i++){
-        const qty = !searchingFor[t[i]] ? 1 : searchingFor[t[i]] + 1;
+        const valueNew = !searchingFor[t[i]];
+        const qty = valueNew ? 1 : searchingFor[t[i]] + 1;
         searchingFor[t[i]] = qty;
+        if(valueNew)uniqueValues ++;
     }
     
-    while(rightPointer <= s.length && leftPointer + t.length <= s.length  ){
-        const string = s.substring(leftPointer, rightPointer + 1);
-        const stringLength = rightPointer + 1 - leftPointer;
-        const stringContainsChars = checkStringContainsChars(string,searchingFor);
-        if(!stringContainsChars)rightPointer++;
-        else leftPointer++;
+    while(rightPointer <= s.length  && leftPointer + t.length <= s.length  ){
         
-         if(stringContainsChars && (!bestString || stringLength < bestString.length)){
-            bestString = string;
+        
+        const stringLength = rightPointer - leftPointer + 1;
+        const stringContainsChars = checkStringContainsChars(s, leftPointer, rightPointer, searchingFor, uniqueValues);
+         if(stringContainsChars && (!bestString || stringLength < bestString[1] - bestString[0] + 1)){
+            bestString = [leftPointer,rightPointer];
+             
+             if(bestString[1] - bestString[0] + 1 === t.length) break;
         }
 
+
+        if(!stringContainsChars)rightPointer++;
+        else leftPointer++;
+        if(!stringContainsChars && rightPointer === s.length )break;
+         
+    
             
         
     }
     
     
     
-    return bestString ?? "";
+    return bestString ? s.substring(bestString[0],bestString[1] + 1) : "";
     
 };
 
-const checkStringContainsChars = (string, searchingFor) => {
+const checkStringContainsChars = (string, leftPointer, rightPointer, searchingFor, uniqueValues) => {
     const foundItems = {};
-    let remainingToFind = Object.keys(searchingFor).length;
+    let remainingToFind = uniqueValues;
     
-    for(let i=0;i<string.length;i++){
+    
+    for(let i=leftPointer;i<=rightPointer;i++){
         const char = string[i];
-        
+            
         if(searchingFor[string[i]] > 0){
             foundItems[string[i]] = !foundItems[string[i]] ? 1 : foundItems[string[i]] + 1;
             if(foundItems[string[i]] === searchingFor[string[i]]){
@@ -51,5 +61,7 @@ const checkStringContainsChars = (string, searchingFor) => {
         }
         if(remainingToFind.length <= 0) return true;
     }
+
+
     return remainingToFind <= 0;
 }
