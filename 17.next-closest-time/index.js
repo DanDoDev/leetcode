@@ -40,7 +40,7 @@ const nextClosestTime = (time) => {
     }
   }
 
-  return `${timeArray[0]}${timeArray[0]}:${timeArray[0]}${timeArray[0]}`;
+  return arrToString(Array(4).fill(timeArray[0]));
 };
 
 const checkValidTime = (timeArray) => {
