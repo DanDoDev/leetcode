@@ -32,11 +32,11 @@ const isValid = (s) => {
           );
           if (!subIsValid) return false;
         }
-        if (rightPointer < s.length - 1) {
-          return isValid(s.substring(rightPointer + 1, s.length));
-        }
       } else openerCount--;
     }
   }
-  return pairFound;
+
+  return rightPointer < s.length - 1
+    ? isValid(s.substring(rightPointer + 1, s.length))
+    : pairFound;
 };
